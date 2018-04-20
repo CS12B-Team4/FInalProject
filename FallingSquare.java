@@ -9,8 +9,8 @@ public class FallingSquare extends JComponent {
     private int speed;
 
     public FallingSquare() {
-        setXCoordinate();
-        setSpeed();
+        this.x=setXCoordinate();
+        this.y=setSpeed();
     }
 
     Random r = new Random();

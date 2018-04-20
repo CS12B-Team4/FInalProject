@@ -16,7 +16,7 @@ public class ClickGame extends JPanel {
     private static JPanel outro1;
     private static JPanel outro2;
     private static ClickGame drawingArea;
-    private FallingSquare[] squares = new FallingSquare[15];
+    private static ArrayList<FallingSquare> squares = new ArrayList<FallingSquare>();
 
     public static void main(String[] args) throws InterruptedException {
         drawingArea = new ClickGame();
@@ -95,9 +95,9 @@ public class ClickGame extends JPanel {
             public void mouseClicked(MouseEvent evt) {
                 int mx = evt.getX();  // x-coordinate where user clicked.
                 int my = evt.getY();  // y-coordinate where user clicked.
-                for (int i = 0; i < 15; i++) {
-                    int theX = drawingArea.squares[i].getXCoordinate();
-                    int theY = drawingArea.squares[i].getYCoordinate();
+                for (FallingSquare s: squares) {
+                    int theX = s.getXCoordinate();
+                    int theY = s.getYCoordinate();
                     if (((theX < mx) && (mx < theX + 30)) && ((theY < my) && (my < theY + 30))) {
                         drawingArea.result++;
                         System.out.println("hit");
@@ -156,7 +156,8 @@ public class ClickGame extends JPanel {
     public ClickGame() {
         scores = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
-            squares[i] = new FallingSquare();
+            FallingSquare s = new FallingSquare();
+            squares.add(s);
         }
 
     }
@@ -179,13 +180,12 @@ public class ClickGame extends JPanel {
           timeL.setText("<html><h3>Time remaining: "+count+"s</h3></html>");
           if (count<=0 ) {
             timer.cancel();
-            for (int i=0;i<squares.length;i++){
-              squares[i]=null;
-            }
+            squares.clear();
             playing = false;
             outro.removeAll();
             outro.add(outro2);
             outro.revalidate();
+            System.out.println("readdddddddd");
           }
           count--;
 
