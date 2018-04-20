@@ -19,6 +19,8 @@ public class ClickGame extends JPanel {
     private static ArrayList<FallingSquare> squares = new ArrayList<FallingSquare>();
 
     public static void main(String[] args) throws InterruptedException {
+      WavPlayerDemo t = new WavPlayerDemo("file:Medley1.wav");
+      t.setVisible(true);
         drawingArea = new ClickGame();
         JFrame frame = new JFrame("Group 04 - Welcome To ClickGame");
         JPanel content = new JPanel(new BorderLayout());
