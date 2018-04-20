@@ -3,19 +3,57 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.io.File;
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+import java.beans.*;
 
-public class Rank{
+
+public class Rank extends JDialog{
 
   HashMap<String,ArrayList<Integer>> history = new HashMap<String,ArrayList<Integer>>();
   TreeMap<Integer,String> highestScore = new TreeMap<Integer,String>();
   JTable table;
 
   public static void main(String[] args){
-
-    JPanel content = new JPanel();
+    JPanel content = new JPanel(); 
+    TreeMap<String, String> userInfo = new TreeMap<String, String>();
+    JTextField name = new JTextField();
+    JPasswordField password = new JPasswordField();
     Rank rankChart = new Rank();
-    JScrollPane scrollpane = new JScrollPane(rankChart.table);
-    content.add(scrollpane);
+    final JComponent[] inputs = new JComponent[] {
+      new JLabel("Name:"),
+      name,
+      new JLabel("Password:"),
+      password 
+    };
+    JButton setInfo = new JButton("Create Player Account");
+      setInfo.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent event){
+          int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
+          if (result == JOptionPane.OK_OPTION) {
+            String myPass= String.valueOf(password.getPassword());
+            userInfo.put(name.getText(), myPass);
+          } 
+        }
+      });
+
+    JButton seeRanking = new JButton("See Ranking");
+      seeRanking.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent event){
+          int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
+          if (result == JOptionPane.OK_OPTION){
+            String myPass= String.valueOf(password.getPassword());
+            if (userInfo.containsKey(name.getText()) && userInfo.get(name.getText()).equals(myPass)){
+              JScrollPane scrollpane = new JScrollPane(rankChart.table);
+              content.add(scrollpane);
+            }
+          }
+        }
+      });
+
+
+    content.add(setInfo);
+    content.add(seeRanking);
 
     JFrame window = new JFrame("Rank");
     window.setContentPane(content);
