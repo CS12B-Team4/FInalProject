@@ -1,15 +1,24 @@
+package FinalProject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import java.util.Random;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class ClickGame extends JPanel {
     int result = 0;
     ArrayList<Integer> scores;
-    private boolean playing = false;
+    static boolean playing = false;
     private boolean menu = true;
     private boolean end = false;
     private FallingSquare[] squares = new FallingSquare[15];
+    static int count = 30;
 
     public ClickGame() {
         scores = new ArrayList<>();
@@ -17,6 +26,25 @@ public class ClickGame extends JPanel {
             squares[i] = new FallingSquare();
         }
 
+    }
+
+    public void timer(JLabel timeL) {
+      Timer timer = new Timer();
+      timer.schedule(new TimerTask() {
+        public void run() {
+          timeL.setText("Time remaining: "+count+"s");
+          if (count<=0 ) {
+            timer.cancel();
+            for (int i=0;i<squares.length;i++){
+              squares[i]=null;
+            }
+            playing = false;
+          }
+          count--;
+
+
+         }
+       }, 0L, 1000L);
     }
 
 
@@ -38,6 +66,7 @@ public class ClickGame extends JPanel {
 
     public static void main(String[] args) throws InterruptedException {
         final Font defaultFont = new Font("Serif", Font.ITALIC, 16);
+        JLabel timeL = new JLabel("Time remaining: 30s");
         ClickGame drawingArea = new ClickGame();
         JFrame frame = new JFrame("ClickGame");
         JPanel content = new JPanel();
@@ -59,6 +88,7 @@ public class ClickGame extends JPanel {
                 } else if (!drawingArea.playing) {
                     drawingArea.end = true;
                 }
+                drawingArea.timer(timeL);
 
             }
         });
@@ -82,6 +112,7 @@ public class ClickGame extends JPanel {
         side.setLayout(new GridLayout(2, 0));
         side.add(startB);
         side.add(pauseB);
+        side.add(timeL);
         content.add(side, BorderLayout.WEST);
         drawingArea.setBackground(Color.BLACK);
 //      set up drawing area event listeners
@@ -111,11 +142,15 @@ public class ClickGame extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
+        
+
         while (true) {
+
             if (drawingArea.playing) {
                 drawingArea.update();
                 drawingArea.repaint();
                 Thread.sleep(10);
+
             } else {
                 Thread.sleep(10);
                 if (drawingArea.end) {
