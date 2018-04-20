@@ -24,7 +24,7 @@ public class FallingSquare extends JComponent {
     }
 
     public int setXCoordinate() {
-        x = r.nextInt(350 - 30);
+        x = r.nextInt(500 - 30);
         return x;
     }
 
@@ -40,11 +40,11 @@ public class FallingSquare extends JComponent {
     When the square reaches the bottom, reset its locataion and speed.
     */
     public void update() {
-        if (y <= 550) {
+        if (y <= 350) {
             y += speed;
         }
 
-        if (y >= 550) {
+        if (y >= 350) {
             setXCoordinate();
             y = -30;
             setSpeed();
@@ -52,11 +52,11 @@ public class FallingSquare extends JComponent {
 
     }
 
-    public void paint(Graphics g) {
-        g.setColor(new Color(255, 150, 150));
+    public void paintComponent(Graphics g) {
+        g.setColor(Color.white);
         g.fillRect(x, y, 30, 30);
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawRect(x, y, 30, 30);
+        g.setColor(new Color(255, 204, 204));
+        g.fillRect(x+3, y+3, 24, 24);
     }
 
 }
