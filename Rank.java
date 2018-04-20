@@ -6,6 +6,7 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import java.beans.*;
+import java.io.*;
 
 
 public class Rank extends JDialog{
@@ -14,7 +15,8 @@ public class Rank extends JDialog{
   TreeMap<Integer,String> highestScore = new TreeMap<Integer,String>();
   JTable table;
 
-  public static void main(String[] args){
+  public static void main(String[] args) throws FileNotFoundException{
+    PrintStream output = new PrintStream(new File("Results.txt"));
     JPanel content = new JPanel(); 
     TreeMap<String, String> userInfo = new TreeMap<String, String>();
     JTextField name = new JTextField();
@@ -31,8 +33,9 @@ public class Rank extends JDialog{
         public void actionPerformed(ActionEvent event){
           int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
           if (result == JOptionPane.OK_OPTION) {
-            String myPass= String.valueOf(password.getPassword());
+            String myPass = String.valueOf(password.getPassword());
             userInfo.put(name.getText(), myPass);
+            output.println(name.getText() + myPass);
           } 
         }
       });
@@ -46,6 +49,7 @@ public class Rank extends JDialog{
             if (userInfo.containsKey(name.getText()) && userInfo.get(name.getText()).equals(myPass)){
               JScrollPane scrollpane = new JScrollPane(rankChart.table);
               content.add(scrollpane);
+
             }
           }
         }
