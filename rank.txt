@@ -1,0 +1,13 @@
+Amy  12
+Bob  14
+Cathy  20
+Drake  10
+Emily  15
+Finn  16
+George  17
+Amy  22
+Kate  9
+Bob  15
+Amy  33
+Zoe  9
+Zoe 8
