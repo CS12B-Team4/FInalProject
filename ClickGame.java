@@ -1,4 +1,4 @@
-package FinalProject;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,10 +52,10 @@ public class ClickGame extends JPanel {
         JButton pauseB = new JButton("<html><h2>PAUSE</h2></html>");
         JButton resultB = new JButton("<html><h2>VIEW RANKING</h2></html>");
         JButton restartB = new JButton("<html><h2>RESTART</h2></html>");
-        JButton musicB = new JButton("<html><h2>SET BGM</h2></html>");
+        JButton musicB = new JButton("<html><h2>SET MUSIC</h2></html>");
         JLabel timeL = new JLabel("<html><h3>Time remaining: 30s</h3></html>");
         JLabel titleCard = new JLabel("<html><h2>Welcome to ClickGame</h2></html>");
-        JLabel note = new JLabel("<html><h3>Click the squares to earn scores!</h3></html>");
+        JLabel note = new JLabel("<html><h3>Click the squares to earn points!</h3></html>");
         titleCard.setHorizontalAlignment(JLabel.CENTER);
         note.setHorizontalAlignment(JLabel.CENTER);
         timeL.setHorizontalAlignment(JLabel.CENTER);

@@ -1,4 +1,3 @@
-package FinalProject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +8,7 @@ public class FallingSquare extends JComponent {
     private int x;
     private int y = 0;
     private int speed;
+    public Color color;
 
     public FallingSquare() {
         this.x=setXCoordinate();
