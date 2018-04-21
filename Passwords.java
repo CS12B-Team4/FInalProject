@@ -1,3 +1,5 @@
+package FinalProject;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -18,7 +20,8 @@ public class Passwords extends JDialog{
   static boolean match = false;
 
 
-  public boolean Passwords() throws FileNotFoundException{
+  public static boolean userInformation() throws FileNotFoundException{
+
 
     JPanel content = new JPanel();
 
@@ -46,8 +49,8 @@ public class Passwords extends JDialog{
               file.close();
               name.setText(" ");
               match = true;
-
             } catch(IOException e) {}
+            return match;
           }
 
         }
@@ -66,7 +69,7 @@ public class Passwords extends JDialog{
             password
           };
 
-          int result = JOptionPane.showConfirmDialog(null, inputs, "Game Account", JOptionPane.PLAIN_MESSAGE);
+          int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
           if (result == JOptionPane.OK_OPTION){
             String myPass= String.valueOf(password.getPassword());
             if (userCheck.containsKey(name.getText()) && userCheck.get(name.getText()).equals(myPass)){
@@ -99,7 +102,7 @@ public class Passwords extends JDialog{
     window.pack();
     window.setVisible(true);
 
-    return match;
+
 
   }
 

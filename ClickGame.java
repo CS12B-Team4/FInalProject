@@ -1,13 +1,16 @@
+package FinalProject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.*;
 
 public class ClickGame extends JPanel {
-    int result = 0;
-    ArrayList<Integer> scores;
+    static int result = 0;
+    static int scores;
     private static boolean playing = false;
     private static boolean menu = true;
     private static boolean end = false;
@@ -18,7 +21,8 @@ public class ClickGame extends JPanel {
     private static ClickGame drawingArea;
     private static ArrayList<FallingSquare> squares = new ArrayList<FallingSquare>();
 
-    public static void main(String[] args) throws InterruptedException {
+    
+    public static void runGame() throws InterruptedException{
       WavPlayerDemo t = new WavPlayerDemo("file:Medley1.wav");
       t.setVisible(true);
         drawingArea = new ClickGame();
@@ -134,7 +138,8 @@ public class ClickGame extends JPanel {
                 if (drawingArea.end) {
                     content.remove(drawingArea);
                     JTextArea resultArea = new JTextArea("Your score is " + drawingArea.result + ". Try again in 5 seconds!\n\n");
-                    drawingArea.scores.add(drawingArea.result);
+                    scores=drawingArea.result;
+                    /**
                     resultArea.append("**HIGHSCORES**\n");
                     for (int i = 1; i <= drawingArea.scores.size(); i++){
                         resultArea.append(String.valueOf(i) + " : " + drawingArea.scores.get(i - 1) + "\n");
@@ -149,6 +154,7 @@ public class ClickGame extends JPanel {
                     content.remove(resultArea);
                     content.revalidate();
                     content.repaint();
+                    */
                 }
             }
         }
@@ -156,7 +162,7 @@ public class ClickGame extends JPanel {
     }
 
     public ClickGame() {
-        scores = new ArrayList<>();
+
         for (int i = 0; i < 15; i++) {
             FallingSquare s = new FallingSquare();
             squares.add(s);
@@ -187,7 +193,11 @@ public class ClickGame extends JPanel {
             outro.removeAll();
             outro.add(outro2);
             outro.revalidate();
-            System.out.println("readdddddddd");
+            try{
+              FileWriter file = new FileWriter("rank.txt",true);
+              file.write(Passwords.nameS+"  "+scores);
+              file.close();
+            } catch (IOException e){}
           }
           count--;
 

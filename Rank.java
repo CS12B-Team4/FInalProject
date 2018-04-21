@@ -1,63 +1,23 @@
+package FinalProject;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.io.File;
-import javax.swing.JOptionPane;
-import javax.swing.JDialog;
-import java.beans.*;
-import java.io.*;
 
-
-public class Rank extends JDialog{
+public class Rank{
 
   HashMap<String,ArrayList<Integer>> history = new HashMap<String,ArrayList<Integer>>();
   TreeMap<Integer,String> highestScore = new TreeMap<Integer,String>();
   JTable table;
 
-  public static void main(String[] args) throws FileNotFoundException{
-    PrintStream output = new PrintStream(new File("Results.txt"));
-    JPanel content = new JPanel(); 
-    TreeMap<String, String> userInfo = new TreeMap<String, String>();
-    JTextField name = new JTextField();
-    JPasswordField password = new JPasswordField();
+  public static void main(String[] args){
+
+    JPanel content = new JPanel();
     Rank rankChart = new Rank();
-    final JComponent[] inputs = new JComponent[] {
-      new JLabel("Name:"),
-      name,
-      new JLabel("Password:"),
-      password 
-    };
-    JButton setInfo = new JButton("Create Player Account");
-      setInfo.addActionListener(new ActionListener(){
-        public void actionPerformed(ActionEvent event){
-          int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
-          if (result == JOptionPane.OK_OPTION) {
-            String myPass = String.valueOf(password.getPassword());
-            userInfo.put(name.getText(), myPass);
-            output.println(name.getText() + myPass);
-          } 
-        }
-      });
-
-    JButton seeRanking = new JButton("See Ranking");
-      seeRanking.addActionListener(new ActionListener(){
-        public void actionPerformed(ActionEvent event){
-          int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
-          if (result == JOptionPane.OK_OPTION){
-            String myPass= String.valueOf(password.getPassword());
-            if (userInfo.containsKey(name.getText()) && userInfo.get(name.getText()).equals(myPass)){
-              JScrollPane scrollpane = new JScrollPane(rankChart.table);
-              content.add(scrollpane);
-
-            }
-          }
-        }
-      });
-
-
-    content.add(setInfo);
-    content.add(seeRanking);
+    JScrollPane scrollpane = new JScrollPane(rankChart.table);
+    content.add(scrollpane);
 
     JFrame window = new JFrame("Rank");
     window.setContentPane(content);
