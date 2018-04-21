@@ -20,7 +20,7 @@ public class Passwords extends JDialog{
   static boolean match = false;
 
 
-  public static boolean userInformation() throws FileNotFoundException{
+  public static void userInformation() throws FileNotFoundException{
 
 
     JPanel content = new JPanel();
@@ -50,11 +50,13 @@ public class Passwords extends JDialog{
               name.setText(" ");
               match = true;
             } catch(IOException e) {}
-            return match;
+
           }
 
         }
       });
+
+
 
     JButton logIn = new JButton("Log in");
     logIn.addActionListener(new ActionListener(){
@@ -105,6 +107,11 @@ public class Passwords extends JDialog{
 
 
   }
+
+  public static boolean getMatch(){
+    return match;
+  }
+
 
 
 

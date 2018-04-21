@@ -21,7 +21,7 @@ public class ClickGame extends JPanel {
     private static ClickGame drawingArea;
     private static ArrayList<FallingSquare> squares = new ArrayList<FallingSquare>();
 
-    
+
     public static void runGame() throws InterruptedException{
       WavPlayerDemo t = new WavPlayerDemo("file:Medley1.wav");
       t.setVisible(true);
@@ -199,7 +199,10 @@ public class ClickGame extends JPanel {
               file.close();
             } catch (IOException e){}
           }
-          count--;
+          if(drawingArea.playing){
+            count--;
+          }
+
 
 
          }
