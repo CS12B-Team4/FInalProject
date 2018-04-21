@@ -9,40 +9,64 @@ import java.util.TimerTask;
 import java.io.*;
 
 public class ClickGame extends JPanel {
-    static int result = 0;
-    static int scores;
+    private static int result = 0;
+    private static int scores;
     private static boolean playing = false;
     private static boolean menu = true;
     private static boolean end = false;
-    private static int count = 5;
+    private static int count = 30;
     private static JPanel outro;
     private static JPanel outro1;
     private static JPanel outro2;
     private static ClickGame drawingArea;
     private static ArrayList<FallingSquare> squares = new ArrayList<FallingSquare>();
+    private static JLabel resultL = new JLabel();
 
+    public static void main(String[] args) throws InterruptedException{
+        try {
+          Passwords.userInformation();
+        } catch (FileNotFoundException e){}
+
+        boolean off = true;
+        while(off){
+          if (Passwords.getMatch()==true) {
+            Passwords.window.setVisible(false);
+            try{runGame();} catch (InterruptedException e){}
+            off = false;
+          }
+        }
+    }
 
     public static void runGame() throws InterruptedException{
-      WavPlayerDemo t = new WavPlayerDemo("file:Medley1.wav");
-      t.setVisible(true);
+
         drawingArea = new ClickGame();
         JFrame frame = new JFrame("Group 04 - Welcome To ClickGame");
         JPanel content = new JPanel(new BorderLayout());
-        JPanel intro = new JPanel(new GridLayout(2,1));
+        JPanel intro = new JPanel(new GridLayout(3,1));
 
-        outro = new JPanel(new GridLayout(1,1));
-        outro1 = new JPanel(new GridLayout(1,2));
-        outro2 = new JPanel(new GridLayout(1,2));
+        outro = new JPanel(new GridLayout(0,1));
+        outro1 = new JPanel(new GridLayout(0,1));
+        outro2 = new JPanel(new GridLayout(0,1));
 
         JButton startB = new JButton("<html><h2>START</h2></html>");
         JButton pauseB = new JButton("<html><h2>PAUSE</h2></html>");
         JButton resultB = new JButton("<html><h2>VIEW RANKING</h2></html>");
         JButton restartB = new JButton("<html><h2>RESTART</h2></html>");
+        JButton musicB = new JButton("<html><h2>SET BGM</h2></html>");
         JLabel timeL = new JLabel("<html><h3>Time remaining: 30s</h3></html>");
         JLabel titleCard = new JLabel("<html><h2>Welcome to ClickGame</h2></html>");
+        JLabel note = new JLabel("<html><h3>Click the squares to earn scores!</h3></html>");
         titleCard.setHorizontalAlignment(JLabel.CENTER);
+        note.setHorizontalAlignment(JLabel.CENTER);
         timeL.setHorizontalAlignment(JLabel.CENTER);
         drawingArea.setBackground(new Color(148,184,184));
+
+        musicB.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            WavPlayerDemo t = new WavPlayerDemo("file:Medley1.wav");
+            t.setVisible(true);
+          }
+        });
 
         startB.addActionListener(new ActionListener() {
             @Override
@@ -56,7 +80,6 @@ public class ClickGame extends JPanel {
                 }
                 drawingArea.timer(timeL);
             }
-
         });
 
         restartB.addActionListener(new ActionListener() {
@@ -67,7 +90,7 @@ public class ClickGame extends JPanel {
               outro.validate();
               drawingArea = new ClickGame();
               drawingArea.setBackground(new Color(148,184,184));
-              count = 5;
+              count = 30;
               drawingArea.menu = true;
               drawingArea.end = false;
               if (drawingArea.menu) {
@@ -96,6 +119,25 @@ public class ClickGame extends JPanel {
 
             }
         });
+
+        resultB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              Rank rankChart = new Rank();
+              JPanel content = new JPanel();
+              JScrollPane scrollpane = new JScrollPane(rankChart.table);
+              content.add(scrollpane);
+
+              JFrame window = new JFrame("Rank");
+              window.setContentPane(content);
+              //window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              window.setLocation(120,70);
+              window.pack();
+              window.setVisible(true);
+
+            }
+        });
+
         drawingArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -113,11 +155,14 @@ public class ClickGame extends JPanel {
         });
 
         intro.add(titleCard);
+        intro.add(note);
         intro.add(timeL);
         outro1.add(pauseB);
         outro1.add(startB);
         outro2.add(resultB);
         outro2.add(restartB);
+        outro2.add(musicB);
+        outro2.add(resultL);
         outro.add(outro1);
         content.add(intro,BorderLayout.PAGE_START);
         content.add(outro,BorderLayout.PAGE_END);
@@ -135,30 +180,8 @@ public class ClickGame extends JPanel {
                 Thread.sleep(17);
             } else {
                 Thread.sleep(17);
-                if (drawingArea.end) {
-                    content.remove(drawingArea);
-                    JTextArea resultArea = new JTextArea("Your score is " + drawingArea.result + ". Try again in 5 seconds!\n\n");
-                    scores=drawingArea.result;
-                    /**
-                    resultArea.append("**HIGHSCORES**\n");
-                    for (int i = 1; i <= drawingArea.scores.size(); i++){
-                        resultArea.append(String.valueOf(i) + " : " + drawingArea.scores.get(i - 1) + "\n");
-                    }
-                    content.add(resultArea, BorderLayout.CENTER);
-                    content.revalidate();
-                    content.repaint();
-                    drawingArea.result = 0;
-                    drawingArea.end = false;
-                    drawingArea.menu = true;
-                    Thread.sleep(5000);
-                    content.remove(resultArea);
-                    content.revalidate();
-                    content.repaint();
-                    */
-                }
             }
         }
-
     }
 
     public ClickGame() {
@@ -167,7 +190,6 @@ public class ClickGame extends JPanel {
             FallingSquare s = new FallingSquare();
             squares.add(s);
         }
-
     }
 
 
@@ -178,7 +200,6 @@ public class ClickGame extends JPanel {
             squareArray.paintComponent(g);
           }
         } catch (NullPointerException e){}
-
     }
 
     public void timer(JLabel timeL) {
@@ -189,22 +210,21 @@ public class ClickGame extends JPanel {
           if (count<=0 ) {
             timer.cancel();
             squares.clear();
+            resultL.setText("Your score is "+drawingArea.result);
             playing = false;
             outro.removeAll();
             outro.add(outro2);
             outro.revalidate();
             try{
               FileWriter file = new FileWriter("rank.txt",true);
-              file.write(Passwords.nameS+"  "+scores);
+              file.write(Passwords.nameS+"  "+drawingArea.result+"\n");
               file.close();
             } catch (IOException e){}
+            drawingArea.result=0;
           }
           if(drawingArea.playing){
             count--;
           }
-
-
-
          }
        }, 0L, 1000L);
     }

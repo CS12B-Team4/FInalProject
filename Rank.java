@@ -3,36 +3,25 @@ package FinalProject;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.*;
 import java.util.*;
 import java.io.File;
 
 public class Rank{
 
   HashMap<String,ArrayList<Integer>> history = new HashMap<String,ArrayList<Integer>>();
-  TreeMap<Integer,String> highestScore = new TreeMap<Integer,String>();
+  TreeMap<String,Integer> highestScore = new TreeMap<String,Integer>();
+  TreeMap<String,Integer> userRank = new TreeMap<String,Integer>();
+  ArrayList<Integer> userScore = new ArrayList<Integer>();
   JTable table;
 
-  public static void main(String[] args){
-
-    JPanel content = new JPanel();
-    Rank rankChart = new Rank();
-    JScrollPane scrollpane = new JScrollPane(rankChart.table);
-    content.add(scrollpane);
-
-    JFrame window = new JFrame("Rank");
-    window.setContentPane(content);
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    window.setLocation(120,70);
-    window.pack();
-    window.setVisible(true);
-  }
-
   public Rank(){
+
     loadData();
     sortAndStoreHighest();
     String[] columnNames = {"Rank","Player Name","Score"};
     Object[][] data = getRankings();
-    this.table = new JTable(data,columnNames);
+    table = new JTable(data,columnNames);
     this.table.setEnabled(false);
   }
 
@@ -67,20 +56,33 @@ public class Rank{
       String name = entry.getKey();
       ArrayList<Integer> scores = entry.getValue();
       Collections.sort(scores,Collections.reverseOrder());
-      highestScore.put(scores.get(0),name);
+      highestScore.put(name,scores.get(0));
+      userScore.add(scores.get(0));
     }
   }
 
   public Object[][] getRankings(){
 
-    Object[][] data = new Object[20][3];
-    Set<Integer> keys = highestScore.descendingKeySet();
-    int index = 0;
-    for (int scores: keys){
-      data[index][0] = index+1;
-      data[index][1] = highestScore.get(scores);
-      data[index][2] = scores;
-      index++;
+    Object[][] data = new Object[highestScore.size()][3];
+    Collections.sort(userScore,Collections.reverseOrder());
+    int rank = 1;
+    for (Integer s: userScore){
+      for (Map.Entry<String, Integer> entry : highestScore.entrySet()) {
+        if (s == entry.getValue()){
+          if (!userRank.containsKey(entry.getKey())){
+            userRank.put(entry.getKey(),rank);
+            rank++;
+          }
+        }
+      }
+    }
+    Set<String> names = highestScore.keySet();
+    for (String name: names){
+      rank = userRank.get(name);
+      int i = rank - 1;
+      data[i][0] = rank;
+      data[i][1] = name;
+      data[i][2] = highestScore.get(name);
     }
     return data;
   }

@@ -2,6 +2,7 @@ package FinalProject;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -24,16 +25,14 @@ public class WavPlayerDemo extends JFrame {
 
     public WavPlayerDemo(String url) {
         try {
-            setSize(300, 100);
-            setLocation(400, 300);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            JPanel jp = new JPanel();
             defaultSound = new URL (url);
-
-            jp.add(btn);
-            jp.add(stp);
-            getContentPane().add(jp);
+            JToolBar tb = new JToolBar("BGM");
+            tb.add(btn);
+            tb.add(stp);
+            getContentPane().add(tb);
+            setLocation(400, 300);
             pack();
+
 
             btn.addActionListener(new ActionListener() {
                 @Override
